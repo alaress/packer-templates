@@ -1,4 +1,9 @@
 */packer_cache/*
+packer_cache
 *.box
 *~
 .*
+*.ovf
+*.ova
+*.vmdk
+*.vdi
