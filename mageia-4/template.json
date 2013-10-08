@@ -9,7 +9,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
-      "iso_checksum": "ece0e1ab80dc09bac7a1d39693666b51",
+      "iso_checksum": "feaccadf03e18d44d9aa21545290c904",
       "iso_checksum_type": "md5",
       "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/cauldron/x86_64/install/images/boot-nonfree.iso",
       "shutdown_command": "sudo shutdown -h now",
