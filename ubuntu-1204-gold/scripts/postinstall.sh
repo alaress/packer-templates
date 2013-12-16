@@ -62,7 +62,7 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove build-essential 3.5.0-23
+apt-get -y remove build-essential 3.2.0- 3.5.0- 3.8.0- linux-generic-lts-raring linux-headers-generic-lts-raring linux-generic-lts-quantal linux-headers-generic-lts-quantal
 apt-get -y autoremove
 apt-get clean
 
