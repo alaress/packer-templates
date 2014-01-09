@@ -3,10 +3,11 @@
 date > /etc/vagrant_box_build_time
 
 # Download and Install PuppetLabs Offical Repository
+# --!! not yet released for Ubuntu 14.04 Trusty
 #cd /tmp
-#wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb
-#dpkg -i puppetlabs-release-precise.deb
-#rm -f puppetlabs-release-precise.deb
+#wget http://apt.puppetlabs.com/puppetlabs-release-trusty.deb
+#dpkg -i puppetlabs-release-trusty.deb
+#rm -f puppetlabs-release-trusty.deb
 
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
@@ -48,7 +49,7 @@ apt-get -y install nfs-common
 apt-get -y install ruby rubygems
 
 # Installing puppet from packages
-#apt-get -y install puppet facter
+apt-get -y install puppet facter
 
 # Installing chef
 #gem install chef --no-ri --no-rdoc
@@ -62,7 +63,7 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove build-essential #3.5.0-23
+apt-get -y remove build-essential 3.12.0-
 apt-get -y autoremove
 apt-get clean
 
