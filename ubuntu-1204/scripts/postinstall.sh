@@ -62,7 +62,8 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove build-essential 3.5.0-23
+# leave raring 3.8.x kernel for virtualbox 4.2 guest edition support
+apt-get -y remove build-essential 3.2.0- 3.5.0- 3.11.0- linux-generic-lts-saucy linux-headers-generic-lts-saucy linux-generic-lts-quantal linux-headers-generic-lts-quantal
 apt-get -y autoremove
 apt-get clean
 
