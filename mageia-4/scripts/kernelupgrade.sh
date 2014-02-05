@@ -4,13 +4,13 @@
 urpmi.removemedia -qa
 
 # Manually add specific mirror
-urpmi.addmedia -q --distrib http://mirror.internode.on.net/pub/mageia/distrib/cauldron/x86_64
+#urpmi.addmedia -q --distrib http://mirror.internode.on.net/pub/mageia/distrib/4/x86_64
 
 # Adds default distributed mirrors
 urpmi.addmedia -q --distrib --mirrorlist '$MIRRORLIST'
 
 # Add cyprix mirror
-#urpmi.addmedia -q --distrib rsync://cyprix.com.au/rpm/Mga2
+#urpmi.addmedia -q --distrib rsync://cyprix.com.au/rpm/Mga4
 
 # Update the mirrors
 urpmi.update -qa

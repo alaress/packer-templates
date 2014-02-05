@@ -2,10 +2,6 @@ date > /etc/vagrant_box_build_time
 
 urpme -q --auto kernel-server-latest kernel-desktop-latest kernel-server-devel-latest kernel-desktop-devel-latest
 
-# Disable kernel upgrades as they will break manually built vbox guest additions
-echo "/^kernel-desktop/" >> /etc/urpmi/skip.list
-echo "/^kernel-server/" >> /etc/urpmi/skip.list
-
 # Update already installed packages
 urpmi -q --auto --auto-select
 
@@ -14,16 +10,12 @@ urpmi -q --auto virtualbox-guest-additions
 urpmi -q --auto gcc-c++ lib64zlib-devel lib64openssl-devel lib64readline-devel lib64sqlite3-devel
 urpmi -q --auto ruby-devel rubygems wget
 
-# Cleanup our mess for space saving
-urpmi -q --clean
-
 # Installing puppet
-gem install --no-ri --no-rdoc puppet
-#urpmi -q --auto puppet facter
-#urpmi -q --clean
+#gem install --no-ri --no-rdoc puppet
+urpmi -q --auto puppet facter
 
 # Installing chef
-gem install --no-ri --no-rdoc chef
+#gem install --no-ri --no-rdoc chef
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
@@ -53,6 +45,9 @@ sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 # Reduce bootloader timeout
 sed -i 's/timeout\ 10/timeout\ 3/g' /boot/grub/menu.lst
 grub-install /dev/sda
+
+# Cleanup our mess for space saving
+urpmi -q --clean
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M

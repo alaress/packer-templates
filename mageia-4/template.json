@@ -2,28 +2,28 @@
   "builders": [
     {
       "boot_command": [
-        "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/cauldron/x86_64, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
+        "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/4/x86_64, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
       ],
       "boot_wait": "4s",
       "disk_size": 10140,
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_additions_mode": "disable",
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
-      "iso_checksum": "feaccadf03e18d44d9aa21545290c904",
+      "iso_checksum": "5bb8c70d50d70be35aba3b8e935474ef",
       "iso_checksum_type": "md5",
-      "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/cauldron/x86_64/install/images/boot-nonfree.iso",
+      "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/4/x86_64/install/images/boot-nonfree.iso",
       "shutdown_command": "sudo shutdown -h now",
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "ssh_username": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "type": "virtualbox",
+      "type": "virtualbox-iso",
       "vboxmanage": [
         [
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "512"
+          "768"
         ],
         [
           "modifyvm",
@@ -32,23 +32,26 @@
           "2"
         ]
       ],
-      "virtualbox_version_file": ".vbox_version"
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "mageia-4"
     }
+  ],
+  "post-processors": [
+    "vagrant"
   ],
   "provisioners": [
     {
       "override": {
-        "virtualbox": {
+        "virtualbox-iso": {
           "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
         }
       },
       "scripts": [
-	"scripts/kernelupgrade.sh",
+        "scripts/kernelupgrade.sh",
         "scripts/postinstall.sh"
       ],
       "type": "shell"
     }
-  ],
-  "post-processors": ["vagrant"]
+  ]
 }
 
