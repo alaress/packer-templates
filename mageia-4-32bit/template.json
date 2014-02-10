@@ -2,16 +2,16 @@
   "builders": [
     {
       "boot_command": [
-        "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/4/x86_64, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
+        "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/4/i586, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
       ],
       "boot_wait": "4s",
       "disk_size": 10140,
       "guest_additions_mode": "disable",
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
-      "iso_checksum": "5bb8c70d50d70be35aba3b8e935474ef",
+      "iso_checksum": "43c77b69b82bac36b5d9a6553e805ce1",
       "iso_checksum_type": "md5",
-      "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/4/x86_64/install/images/boot-nonfree.iso",
+      "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/4/i586/install/images/boot-nonfree.iso",
       "shutdown_command": "sudo shutdown -h now",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -33,7 +33,7 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "mageia-4"
+      "vm_name": "mageia-4-32bit"
     }
   ],
   "post-processors": [

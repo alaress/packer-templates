@@ -7,7 +7,7 @@ urpmi -q --auto --auto-select
 
 # Install puppet and chef dependencies
 urpmi -q --auto virtualbox-guest-additions
-urpmi -q --auto gcc-c++ lib64zlib-devel lib64openssl-devel lib64readline-devel lib64sqlite3-devel
+urpmi -q --auto gcc-c++ libzlib-devel libopenssl-devel libreadline-devel libsqlite3-devel
 urpmi -q --auto ruby-devel rubygems wget
 
 # Installing puppet
