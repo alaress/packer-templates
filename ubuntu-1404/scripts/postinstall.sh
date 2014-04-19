@@ -24,15 +24,19 @@ if [ -f /home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso ];
 then
   vboxiso="/home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso"
 else
-  wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+#  wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
   vboxiso="/tmp/VBoxGuestAdditions_$VBOX_VERSION.iso"
 fi
-mount -o loop $vboxiso /mnt
-sh /mnt/VBoxLinuxAdditions.run
-umount /mnt
+#mount -o loop $vboxiso /mnt
+#sh /mnt/VBoxLinuxAdditions.run
+#umount /mnt
 rm -f $vboxiso;
 
 rm -f VBoxGuestAdditions_$VBOX_VERSION.iso
+
+# Use guest editions from repo to ensure version 4.3+
+# guest editions 4.2.x fails with kernel 3.10+
+apt-get -y install virtualbox-guest-dkms
 
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin
