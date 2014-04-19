@@ -60,7 +60,7 @@
     },
     {
       "override": {
-        "virtualbox": {
+        "virtualbox-iso": {
           "execute_command": "echo 'vagrant'|sudo -S puppet apply -v --modulepath='{{.ModulePath}}' {{.ManifestFile}}"
         }
       },
@@ -72,7 +72,7 @@
     },
     {
       "override": {
-        "virtualbox": {
+        "virtualbox-iso": {
           "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
         }
       },
