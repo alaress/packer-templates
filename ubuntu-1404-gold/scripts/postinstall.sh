@@ -3,11 +3,10 @@
 date > /etc/vagrant_box_build_time
 
 # Download and Install PuppetLabs Offical Repository
-# --!! not yet released for Ubuntu 14.04 Trusty
 #cd /tmp
-#wget http://apt.puppetlabs.com/puppetlabs-release-trusty.deb
-#dpkg -i puppetlabs-release-trusty.deb
-#rm -f puppetlabs-release-trusty.deb
+wget http://apt.puppetlabs.com/puppetlabs-release-trusty.deb
+dpkg -i puppetlabs-release-trusty.deb
+rm -f puppetlabs-release-trusty.deb
 
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
@@ -50,7 +49,7 @@ sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 apt-get -y install nfs-common
 
 # Install Ruby from packages
-apt-get -y install ruby rubygems
+#apt-get -y install ruby rubygems
 
 # Installing puppet from packages
 apt-get -y install puppet facter
