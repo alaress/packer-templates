@@ -1,6 +1,41 @@
 {
   "builders": [
     {
+      "type": "vmware-iso",
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
+      "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+      "iso_checksum_type": "sha256",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{ .Name }} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA tokeyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "initrd=/install/initrd.gz -- <enter>"
+      ],
+      "disk_size": 20140,
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "512",
+        "numvcpus": "2"
+      },
+      "http_directory": "http",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "ssh_wait_timeout": "20m",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "tools_upload_flavor": "linux",
+      "vm_name": "ubuntu-1204"
+    },
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
+      "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+      "iso_checksum_type": "sha256",
+      "boot_wait": "5s",
       "boot_command": [
         "<esc><esc><enter><wait>",
         "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
@@ -10,20 +45,7 @@
         "keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
         "initrd=/install/initrd.gz -- <enter><wait>"
       ],
-      "boot_wait": "4s",
-      "disk_size": 10140,
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-      "guest_os_type": "Ubuntu_64",
-      "http_directory": "http",
-      "iso_checksum": "01545fa976c8367b4f0d59169ac4866c",
-      "iso_checksum_type": "md5",
-      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04-server-amd64.iso",
-      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
-      "ssh_password": "vagrant",
-      "ssh_port": 22,
-      "ssh_username": "vagrant",
-      "ssh_wait_timeout": "10000s",
-      "type": "virtualbox-iso",
+      "disk_size": 20140,
       "vboxmanage": [
         [
           "modifyvm",
@@ -38,26 +60,67 @@
           "2"
         ]
       ],
+      "http_directory": "http",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_wait_timeout": "20m",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "ssh_port": 22,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "ubuntu-1404"
+      "vm_name": "ubuntu-1204-gold"
     }
   ],
-  "post-processors": [
-    "vagrant"
-  ],
+
   "provisioners": [
     {
+      "type": "shell",
+      "script": "scripts/kernel.sh",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/vagrant.sh",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/fusion.sh",
       "override": {
         "virtualbox-iso": {
-          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+          "execute_command": "/bin/true"
+        },
+        "vmware-iso": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
         }
-      },
+      }
+    },
+    {
+      "type": "shell",
+      "script": "scripts/virtualbox.sh",
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+        },
+        "vmware-iso": {
+          "execute_command": "/bin/true"
+        }
+      }
+    },
+    {
+      "type": "shell",
       "scripts": [
-        "scripts/kernelupgrade.sh",
-        "scripts/postinstall.sh",
-        "scripts/zero.sh"
+        "scripts/vm_cleanup.sh"
       ],
-      "type": "shell"
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false
     }
   ]
 }
