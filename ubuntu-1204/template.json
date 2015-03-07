@@ -69,7 +69,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "ubuntu-1204-gold"
+      "vm_name": "ubuntu-1204"
     }
   ],
 

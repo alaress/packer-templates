@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "vmware-iso",
-      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
+      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.2-server-amd64.iso",
       "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
@@ -28,7 +28,7 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "tools_upload_flavor": "linux",
-      "vm_name": "ubuntu-1204"
+      "vm_name": "ubuntu-1404"
     },
     {
       "type": "virtualbox-iso",
@@ -69,7 +69,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "ubuntu-1204-gold"
+      "vm_name": "ubuntu-1404"
     }
   ],
 
