@@ -28,7 +28,7 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "tools_upload_flavor": "linux",
-      "vm_name": "ubuntu-1204-gold"
+      "vm_name": "ubuntu-1204"
     },
     {
       "type": "virtualbox-iso",
