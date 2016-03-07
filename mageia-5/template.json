@@ -1,0 +1,57 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/5/x86_64, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
+      ],
+      "boot_wait": "4s",
+      "disk_size": 20140,
+      "guest_additions_mode": "disable",
+      "guest_os_type": "RedHat_64",
+      "http_directory": "http",
+      "iso_checksum": "14d07b23a2b4c1f2ed4fe2350a710f9f",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://mirror.internode.on.net/pub/mageia/distrib/5/x86_64/install/images/boot-nonfree.iso",
+      "shutdown_command": "sudo shutdown -h now",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "768"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "mageia-5"
+    }
+  ],
+  "post-processors": [
+    "vagrant"
+  ],
+  "provisioners": [
+    {
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+        }
+      },
+      "scripts": [
+        "scripts/kernelupgrade.sh",
+        "scripts/postinstall.sh"
+      ],
+      "type": "shell"
+    }
+  ]
+}
+
