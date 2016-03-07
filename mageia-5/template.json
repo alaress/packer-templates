@@ -5,7 +5,7 @@
         "linux automatic=met:http,netw:dhcp,hos:packer,ser:mirror.internode.on.net,dir:pub/mageia/distrib/5/x86_64, kickstart=http://{{ .HTTPIP }}:{{ .HTTPPort }}/auto_inst.cfg<enter><wait>"
       ],
       "boot_wait": "4s",
-      "disk_size": 10140,
+      "disk_size": 20140,
       "guest_additions_mode": "disable",
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
@@ -33,7 +33,7 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "mageia-4"
+      "vm_name": "mageia-5"
     }
   ],
   "post-processors": [
