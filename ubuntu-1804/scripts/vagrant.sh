@@ -30,3 +30,6 @@ apt-get install -y nfs-common
 
 # Installing puppet from packages
 apt-get install -y puppet facter
+
+# Install some base dependencies
+apt-get install -y gpg software-properties-common vim
