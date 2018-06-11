@@ -19,17 +19,16 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Download and Install PuppetLabs Offical Repository
-# TODO: no Bionic version yet
-#wget http://apt.puppetlabs.com/puppetlabs-release-bionic.deb
-#dpkg -i puppetlabs-release-bionic.deb
-#rm -f puppetlabs-release-bionic.deb
+wget http://apt.puppetlabs.com/puppet-release-bionic.deb
+dpkg -i puppet-release-bionic.deb
+rm -f puppet-release-bionic.deb
 
 # Install NFS for Vagrant
 apt-get update
 apt-get install -y nfs-common
 
 # Installing puppet from packages
-apt-get install -y puppet facter
+apt-get install -y puppet-agent
 
 # Install some base dependencies
 apt-get install -y gpg software-properties-common vim

@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "vmware-iso",
-      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
-      "iso_checksum": "a3b345908a826e262f4ea1afeb357fd09ec0558cf34e6c9112cead4bb55ccdfb",
+      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.5-server-amd64.iso",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
       "boot_command": [
@@ -15,7 +15,7 @@
         "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA tokeyboard-configuration/variant=USA console-setup/ask_detect=false ",
         "initrd=/install/initrd.gz -- <enter>"
       ],
-      "disk_size": 20140,
+      "disk_size": 46080,
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "512",
@@ -28,12 +28,12 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "tools_upload_flavor": "linux",
-      "vm_name": "ubuntu-1404"
+      "vm_name": "ubuntu-1404-php71.vagrant"
     },
     {
       "type": "virtualbox-iso",
-      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
-      "iso_checksum": "a3b345908a826e262f4ea1afeb357fd09ec0558cf34e6c9112cead4bb55ccdfb",
+      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.5-server-amd64.iso",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
       "boot_command": [
@@ -45,7 +45,7 @@
         "keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
         "initrd=/install/initrd.gz -- <enter><wait>"
       ],
-      "disk_size": 20140,
+      "disk_size": 46080,
       "vboxmanage": [
         [
           "modifyvm",
@@ -69,7 +69,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "ubuntu-1404"
+      "vm_name": "ubuntu-1404-php71.vagrant"
     }
   ],
 
@@ -77,6 +77,7 @@
     {
       "type": "shell",
       "script": "scripts/kernel.sh",
+      "expect_disconnect": true,
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
     },
     {
@@ -109,12 +110,44 @@
       }
     },
     {
-      "module_paths": [
-        "[insert path to puppet modules here]"
-      ],
-      "manifest_file": "[insert path to puppet manifest here]",
+      "type": "file",
+      "source": "/home/sam.bailey/github/puppet-alaress/data/hieradata",
+      "destination": "/tmp/hieradata"
+    },
+    {
+      "type": "file",
+      "source": "/home/sam.bailey/github/puppet-alaress/data/environments/production/modules",
+      "destination": "/tmp/puppet-modules"
+    },
+    {
+      "type": "file",
+      "source": "/home/sam.bailey/github/puppet-alaress/data/environments/production/hiera.yaml",
+      "destination": "/tmp/hiera.yaml"
+    },
+    {
+      "type": "file",
+      "source": "/home/sam.bailey/github/puppet-alaress/data/environments/production/manifests/site.pp",
+      "destination": "/tmp/site.pp"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -vp /etc/puppet/hieradata",
+        "sudo cp -v /tmp/hieradata/common.yaml /etc/puppet/hieradata/",
+        "sudo cp -v /tmp/hieradata/precise.yaml /etc/puppet/hieradata/",
+        "sudo cp -v /tmp/hieradata/trusty.yaml /etc/puppet/hieradata/",
+        "sudo cp -v /tmp/hieradata/xenial.yaml /etc/puppet/hieradata/",
+        "sudo cp -v /tmp/hieradata/*vagrant.yaml /etc/puppet/hieradata/",
+        "sudo cp -r /tmp/puppet-modules/* /etc/puppet/modules",
+        "sudo cp /tmp/hiera.yaml /etc/puppet/hiera.yaml",
+        "sudo cp /tmp/site.pp /etc/puppet/manifests/site.pp",
+        "rm -rf /tmp/{hieradata,puppet-modules,hiera.yaml,site.pp}"
+      ]
+    },
+    {
+      "manifest_file": "/home/sam.bailey/github/puppet-alaress/data/environments/production/manifests/site.pp",
       "type": "puppet-masterless",
-      "execute_command": "echo 'vagrant'|sudo -S puppet apply -v --modulepath='{{.ModulePath}}' {{.ManifestFile}}"
+      "execute_command": "echo 'vagrant'|sudo -S puppet apply --verbose --modulepath=/etc/puppet/modules --hiera_config=/etc/puppet/hiera.yaml {{.ManifestFile}}"
     },
     {
       "type": "shell",

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Record build date
+date '+%s' >> /home/vagrant/.vagrant.buildtimestamp
+
 # Set up sudo
 echo %vagrant ALL=NOPASSWD:ALL > /etc/sudoers.d/vagrant
 chmod 0440 /etc/sudoers.d/vagrant

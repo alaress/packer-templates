@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "vmware-iso",
-      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.2-server-amd64.iso",
-      "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.5-server-amd64.iso",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
       "boot_command": [
@@ -15,7 +15,7 @@
         "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA tokeyboard-configuration/variant=USA console-setup/ask_detect=false ",
         "initrd=/install/initrd.gz -- <enter>"
       ],
-      "disk_size": 20140,
+      "disk_size": 46080,
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "512",
@@ -32,8 +32,8 @@
     },
     {
       "type": "virtualbox-iso",
-      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
-      "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+      "iso_url": "http://mirror.internode.on.net/pub/ubuntu/releases/14.04/ubuntu-14.04.5-server-amd64.iso",
+      "iso_checksum": "dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
       "boot_command": [
@@ -45,7 +45,7 @@
         "keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
         "initrd=/install/initrd.gz -- <enter><wait>"
       ],
-      "disk_size": 20140,
+      "disk_size": 46080,
       "vboxmanage": [
         [
           "modifyvm",
