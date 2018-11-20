@@ -1,0 +1,210 @@
+{
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.1-server-amd64.iso",
+      "iso_checksum": "a5b0ea5918f850124f3d72ef4b85bda82f0fcd02ec721be19c1a6952791c8ee8",
+      "iso_checksum_type": "sha256",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_domain=vm<wait>",
+        " netcfg/get_hostname={{ .Name }}<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- <wait>",
+        "<enter><wait>"
+      ],
+      "disk_size": 46080,
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "512",
+        "numvcpus": "2"
+      },
+      "http_directory": "http",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "ssh_wait_timeout": "20m",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "tools_upload_flavor": "linux",
+      "vm_name": "ubuntu-1804-php71.vagrant"
+    },
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.1-server-amd64.iso",
+      "iso_checksum": "a5b0ea5918f850124f3d72ef4b85bda82f0fcd02ec721be19c1a6952791c8ee8",
+      "iso_checksum_type": "sha256",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_domain=vm<wait>",
+        " netcfg/get_hostname={{ .Name }}<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- <wait>",
+        "<enter><wait>"
+      ],
+      "disk_size": 46080,
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ],
+      "http_directory": "http",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_wait_timeout": "20m",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "ssh_port": 22,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "ubuntu-1804-php71.vagrant"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/kernel.sh",
+      "expect_disconnect": true,
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/vagrant.sh",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/fusion.sh",
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "/bin/true"
+        },
+        "vmware-iso": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "script": "scripts/virtualbox.sh",
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+        },
+        "vmware-iso": {
+          "execute_command": "/bin/true"
+        }
+      }
+    },
+    {
+      "type": "file",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/hieradata",
+      "destination": "/tmp/hieradata"
+    },
+    {
+      "type": "file",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/modules",
+      "destination": "/tmp/puppet-modules"
+    },
+    {
+      "type": "file",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/hiera.yaml",
+      "destination": "/tmp/hiera.yaml"
+    },
+    {
+      "type": "file",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/manifests/site.pp",
+      "destination": "/tmp/site.pp"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata",
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata/node",
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata/os",
+        "sudo mkdir -vp /etc/puppetlabs/code/manifests",
+        "sudo mkdir -vp /etc/puppetlabs/code/modules",
+        "sudo cp -v /tmp/hieradata/common.yaml /etc/puppetlabs/code/hieradata/",
+        "sudo cp -v /tmp/hieradata/os/bionic.yaml /etc/puppetlabs/code/hieradata/os/",
+        "sudo cp -v /tmp/hieradata/node/*vagrant.yaml /etc/puppetlabs/code/hieradata/node/",
+        "sudo cp -r /tmp/puppet-modules/* /etc/puppetlabs/code/modules",
+        "sudo cp /tmp/hiera.yaml /etc/puppetlabs/code/hiera.yaml",
+        "sudo cp /tmp/site.pp /etc/puppetlabs/code/manifests/site.pp",
+        "rm -rf /tmp/{hieradata,puppet-modules,hiera.yaml,site.pp}"
+      ]
+    },
+    {
+      "manifest_file": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/manifests/site.pp",
+      "type": "puppet-masterless",
+      "execute_command": "echo 'vagrant'|sudo -S /opt/puppetlabs/bin/puppet apply --verbose --modulepath=/etc/puppetlabs/code/modules --hiera_config=/etc/puppetlabs/code/hiera.yaml {{.ManifestFile}}"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm -rf /etc/puppetlabs/code/{hieradata,modules,hiera.yaml,manifests}"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/vm_cleanup.sh"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false
+    }
+  ]
+}
+
