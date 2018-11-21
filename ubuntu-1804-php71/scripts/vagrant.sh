@@ -31,4 +31,4 @@ apt-get install -y nfs-common
 apt-get install -y puppet-agent
 
 # Install some base dependencies
-apt-get install -y gpg software-properties-common vim
+apt-get install -y gpg software-properties-common vim apt-show-versions
