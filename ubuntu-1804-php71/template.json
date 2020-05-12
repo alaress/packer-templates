@@ -1,56 +1,9 @@
 {
   "builders": [
     {
-      "type": "vmware-iso",
-      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.1-server-amd64.iso",
-      "iso_checksum": "a5b0ea5918f850124f3d72ef4b85bda82f0fcd02ec721be19c1a6952791c8ee8",
-      "iso_checksum_type": "sha256",
-      "boot_wait": "5s",
-      "boot_command": [
-        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "/install/vmlinuz<wait>",
-        " auto<wait>",
-        " console-setup/ask_detect=false<wait>",
-        " console-setup/layoutcode=us<wait>",
-        " console-setup/modelcode=pc105<wait>",
-        " debconf/frontend=noninteractive<wait>",
-        " debian-installer=en_US<wait>",
-        " fb=false<wait>",
-        " initrd=/install/initrd.gz<wait>",
-        " kbd-chooser/method=us<wait>",
-        " keyboard-configuration/layout=USA<wait>",
-        " keyboard-configuration/variant=USA<wait>",
-        " locale=en_US<wait>",
-        " netcfg/get_domain=vm<wait>",
-        " netcfg/get_hostname={{ .Name }}<wait>",
-        " grub-installer/bootdev=/dev/sda<wait>",
-        " noapic<wait>",
-        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
-        " -- <wait>",
-        "<enter><wait>"
-      ],
-      "disk_size": 46080,
-      "vmx_data": {
-        "cpuid.coresPerSocket": "1",
-        "memsize": "512",
-        "numvcpus": "2"
-      },
-      "http_directory": "http",
-      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
-      "ssh_wait_timeout": "20m",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
-      "ssh_port": 22,
-      "tools_upload_flavor": "linux",
-      "vm_name": "ubuntu-1804-php71.vagrant"
-    },
-    {
       "type": "virtualbox-iso",
-      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.1-server-amd64.iso",
-      "iso_checksum": "a5b0ea5918f850124f3d72ef4b85bda82f0fcd02ec721be19c1a6952791c8ee8",
+      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso",
+      "iso_checksum": "e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b",
       "iso_checksum_type": "sha256",
       "boot_wait": "5s",
       "boot_command": [
@@ -125,9 +78,6 @@
       "override": {
         "virtualbox-iso": {
           "execute_command": "/bin/true"
-        },
-        "vmware-iso": {
-          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
         }
       }
     },
@@ -137,30 +87,27 @@
       "override": {
         "virtualbox-iso": {
           "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
-        },
-        "vmware-iso": {
-          "execute_command": "/bin/true"
         }
       }
     },
     {
       "type": "file",
-      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/hieradata",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/staging/hieradata",
       "destination": "/tmp/hieradata"
     },
     {
       "type": "file",
-      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/modules",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/staging/modules",
       "destination": "/tmp/puppet-modules"
     },
     {
       "type": "file",
-      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/hiera.yaml",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/staging/hiera.yaml",
       "destination": "/tmp/hiera.yaml"
     },
     {
       "type": "file",
-      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/production/manifests/site.pp",
+      "source": "/$LOCALPATHTOGITREPO/puppet-alaress/environments/staging/manifests/site.pp",
       "destination": "/tmp/site.pp"
     },
     {
@@ -207,4 +154,3 @@
     }
   ]
 }
-
