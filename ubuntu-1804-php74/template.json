@@ -1,0 +1,165 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.6-server-amd64.iso",
+      "iso_checksum": "f5cbb8104348f0097a8e513b10173a07dbc6684595e331cb06f93f385d0aecf6",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "/install/vmlinuz",
+        " auto",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname={{ .Name }}",
+        " grub-installer/bootdev=/dev/sda",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- <wait>",
+        "<enter><wait>"
+      ],
+      "disk_size": 46080,
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "8192"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ],
+      "http_directory": "http",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_wait_timeout": "20m",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "ssh_port": 22,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "ubuntu-1804-php74.vagrant"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/kernel.sh",
+      "expect_disconnect": true,
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/vagrant.sh",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/fusion.sh",
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "/bin/true"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "script": "scripts/virtualbox.sh",
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+        }
+      }
+    },
+    {
+      "type": "file",
+      "source": "/home/elil/puppet-alaress/environments/staging/hieradata",
+      "destination": "/tmp/hieradata"
+    },
+    {
+      "type": "file",
+      "source": "/home/elil/puppet-alaress/environments/staging/modules",
+      "destination": "/tmp/puppet-modules"
+    },
+    {
+      "type": "file",
+      "source": "/home/elil/puppet-alaress/environments/staging/hiera.yaml",
+      "destination": "/tmp/hiera.yaml"
+    },
+    {
+      "type": "file",
+      "source": "/home/elil/puppet-alaress/environments/staging/manifests/site.pp",
+      "destination": "/tmp/site.pp"
+    },
+    {
+      "type": "file",
+      "source": "/home/elil/puppet-alaress/vagrant",
+      "destination": "/tmp/puppet"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata",
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata/node",
+        "sudo mkdir -vp /etc/puppetlabs/code/hieradata/os",
+        "sudo mkdir -vp /etc/puppetlabs/code/manifests",
+        "sudo mkdir -vp /etc/puppetlabs/code/modules",
+        "sudo mkdir -vp /etc/puppetlabs/puppet/eyaml",
+        "sudo cp -v /tmp/hieradata/common.yaml /etc/puppetlabs/code/hieradata/",
+        "sudo cp -v /tmp/hieradata/os/bionic.yaml /etc/puppetlabs/code/hieradata/os/",
+        "sudo cp -v /tmp/hieradata/node/*vagrant.yaml /etc/puppetlabs/code/hieradata/node/",
+        "sudo cp -r /tmp/puppet-modules/* /etc/puppetlabs/code/modules",
+        "sudo cp /tmp/hiera.yaml /etc/puppetlabs/code/hiera.yaml",
+        "sudo cp /tmp/site.pp /etc/puppetlabs/code/manifests/site.pp",
+        "sudo cp -v /tmp/puppet/keys/* /etc/puppetlabs/puppet/eyaml",
+        "rm -rf /tmp/{hieradata,puppet-modules,hiera.yaml,site.pp,puppet}"
+      ]
+    },
+    {
+      "manifest_file": "/home/elil/puppet-alaress/environments/production/manifests/site.pp",
+      "type": "puppet-masterless",
+      "facter": {
+        "suppress_instance_configuration": true
+      },
+      "execute_command": "echo 'vagrant'|sudo -S /opt/puppetlabs/bin/puppet apply --verbose --modulepath=/etc/puppetlabs/code/modules --hiera_config=/etc/puppetlabs/code/hiera.yaml {{.ManifestFile}}"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm -rf /etc/puppetlabs/code/{hieradata,modules,hiera.yaml,manifests}"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/vm_cleanup.sh"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true
+    }
+  ]
+}

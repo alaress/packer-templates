@@ -7,3 +7,4 @@ packer_cache
 *.ova
 *.vmdk
 *.vdi
+*/output-virtualbox-iso/
