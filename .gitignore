@@ -8,3 +8,6 @@ packer_cache
 *.vmdk
 *.vdi
 */output-virtualbox-iso/
+*.pkrvars.hcl
+output-*/
+*.log
