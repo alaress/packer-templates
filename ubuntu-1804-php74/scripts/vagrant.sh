@@ -10,7 +10,7 @@ wget -qO - http://apt.schoolbox.com.au/schoolbox.key | apt-key add -
 apt-get update
 
 # Installing puppet from packages
-DEBIAN_FRONTEND=noninteractive apt-get install -y puppet-agent 
+DEBIAN_FRONTEND=noninteractive apt-get install -y puppet-agent libxext6
 /opt/puppetlabs/puppet/bin/gem install lookup_http
 
 # Install some base dependencies
