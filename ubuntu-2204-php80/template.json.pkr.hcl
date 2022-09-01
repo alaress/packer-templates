@@ -20,12 +20,18 @@ build {
 
   provisioner "shell" {
     execute_command   = "echo 'vagrant' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
-    expect_disconnect = true
     script            = "scripts/kernel.sh"
   }
 
   provisioner "shell" {
-    pause_before    = "15s"
+    inline = [
+      "sudo reboot"
+    ]
+    expect_disconnect = true
+    pause_after = "30s"
+  }
+
+  provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
     script          = "scripts/vagrant.sh"
   }
