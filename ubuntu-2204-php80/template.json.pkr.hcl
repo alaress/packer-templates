@@ -1,10 +1,11 @@
 
 source "vagrant" "jammy" {
   communicator = "ssh"
-  source_path = "bento/ubuntu-22.04"
+  source_path = "ubuntu/jammy64"
   provider = "virtualbox"
   template = "./vagrantfile.template"
   box_name = "ubuntu-2204-php80"
+  ssh_timeout = "10s"
 }
 
 variable "puppetRepo" {
