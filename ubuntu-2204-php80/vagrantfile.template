@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.define "source", autostart: false do |source|
-	source.vm.box = "ubuntu/bionic64"
+	source.vm.box = "ubuntu/jammy64"
 	config.ssh.insert_key = false
   end
   config.vm.define "output" do |output|
@@ -9,8 +9,5 @@ Vagrant.configure("2") do |config|
 	config.ssh.insert_key = false
   end
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.hostname = "ubuntu-1804-php74.vagrant"
-  config.vm.provider "virtualbox" do |vb|
-    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
-  end
+  config.vm.hostname = "ubuntu-2204-php80.vagrant"
 end
