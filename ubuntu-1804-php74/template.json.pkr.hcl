@@ -79,17 +79,17 @@ build {
       "rm -rf /tmp/{hieradata,puppet-modules,hiera.yaml,site.pp,puppet,keys}",
       ]
   }
-    provisioner "shell" {
-    inline = [<<SCRIPT
-sudo apt-get install -y rabbitmq-server=3.6.15-1 erlang-base=1:20.2.2+dfsg-1ubuntu2 erlang-inets=1:20.2.2+dfsg-1ubuntu2 erlang-mnesia=1:20.2.2+dfsg-1ubuntu2 \
-erlang-ssl=1:20.2.2+dfsg-1ubuntu2 erlang-runtime-tools=1:20.2.2+dfsg-1ubuntu2 erlang-crypto=1:20.2.2+dfsg-1ubuntu2 erlang-public-key=1:20.2.2+dfsg-1ubuntu2 \
-erlang-asn1=1:20.2.2+dfsg-1ubuntu2 erlang-nox=1:20.2.2+dfsg-1ubuntu2 erlang-diameter=1:20.2.2+dfsg-1ubuntu2 erlang-edoc=1:20.2.2+dfsg-1ubuntu2 \
-erlang-eldap=1:20.2.2+dfsg-1ubuntu2 erlang-erl-docgen=1:20.2.2+dfsg-1ubuntu2 erlang-eunit=1:20.2.2+dfsg-1ubuntu2 erlang-ic=1:20.2.2+dfsg-1ubuntu2 erlang-odbc=1:20.2.2+dfsg-1ubuntu2 \
-erlang-os-mon=1:20.2.2+dfsg-1ubuntu2 erlang-parsetools=1:20.2.2+dfsg-1ubuntu2 erlang-snmp=1:20.2.2+dfsg-1ubuntu2 erlang-ssh=1:20.2.2+dfsg-1ubuntu2 erlang-syntax-tools=1:20.2.2+dfsg-1ubuntu2 \
-erlang-tools=1:20.2.2+dfsg-1ubuntu2 erlang-xmerl=1:20.2.2+dfsg-1ubuntu2
-SCRIPT
-    ]
-  }
+#     provisioner "shell" {
+#     inline = [<<SCRIPT
+# sudo apt-get install -y rabbitmq-server=3.6.15-1 erlang-base=1:20.2.2+dfsg-1ubuntu2 erlang-inets=1:20.2.2+dfsg-1ubuntu2 erlang-mnesia=1:20.2.2+dfsg-1ubuntu2 \
+# erlang-ssl=1:20.2.2+dfsg-1ubuntu2 erlang-runtime-tools=1:20.2.2+dfsg-1ubuntu2 erlang-crypto=1:20.2.2+dfsg-1ubuntu2 erlang-public-key=1:20.2.2+dfsg-1ubuntu2 \
+# erlang-asn1=1:20.2.2+dfsg-1ubuntu2 erlang-nox=1:20.2.2+dfsg-1ubuntu2 erlang-diameter=1:20.2.2+dfsg-1ubuntu2 erlang-edoc=1:20.2.2+dfsg-1ubuntu2 \
+# erlang-eldap=1:20.2.2+dfsg-1ubuntu2 erlang-erl-docgen=1:20.2.2+dfsg-1ubuntu2 erlang-eunit=1:20.2.2+dfsg-1ubuntu2 erlang-ic=1:20.2.2+dfsg-1ubuntu2 erlang-odbc=1:20.2.2+dfsg-1ubuntu2 \
+# erlang-os-mon=1:20.2.2+dfsg-1ubuntu2 erlang-parsetools=1:20.2.2+dfsg-1ubuntu2 erlang-snmp=1:20.2.2+dfsg-1ubuntu2 erlang-ssh=1:20.2.2+dfsg-1ubuntu2 erlang-syntax-tools=1:20.2.2+dfsg-1ubuntu2 \
+# erlang-tools=1:20.2.2+dfsg-1ubuntu2 erlang-xmerl=1:20.2.2+dfsg-1ubuntu2
+# SCRIPT
+#     ]
+#   }
 
   provisioner "puppet-masterless" {
     execute_command = "echo 'vagrant'|sudo -S FACTER_primary_php_majver=8.0 /opt/puppetlabs/bin/puppet apply --verbose --modulepath=/etc/puppetlabs/code/modules --hiera_config=/etc/puppetlabs/code/hiera.yaml {{.ManifestFile}}"
