@@ -1,3 +1,11 @@
+packer {
+  required_plugins {
+    vagrant = {
+      source  = "github.com/hashicorp/vagrant"
+      version = "~> 1"
+    }
+  }
+}
 
 source "vagrant" "jammy" {
   communicator = "ssh"
@@ -88,13 +96,11 @@ build {
       ]
   }
 
-  provisioner "puppet-masterless" {
-    execute_command = "echo 'vagrant'|sudo -S FACTER_primary_php_majver=8.0 /opt/puppetlabs/bin/puppet apply --verbose --modulepath=/etc/puppetlabs/code/modules --hiera_config=/etc/puppetlabs/code/hiera.yaml {{.ManifestFile}}"
-    facter = {
-      suppress_instance_configuration = true
-      primary_php_major_version = "8.0"
-    }
-    manifest_file = "${var.puppetRepo}/environments/staging/manifests/site.pp"
+  provisioner "shell" {
+    inline =  [
+      "echo 'vagrant'|sudo -S FACTER_primary_php_majver=8.0 /opt/puppetlabs/bin/puppet apply --verbose --modulepath=/etc/puppetlabs/code/modules --hiera_config=/etc/puppetlabs/code/hiera.yaml /etc/puppetlabs/code/manifests/site.pp",
+      "sudo docker pull gotenberg/gotenberg:7"
+    ]
   }
 
   provisioner "shell" {
