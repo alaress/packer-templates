@@ -12,8 +12,10 @@ source "vagrant" "jammy" {
   source_path = "ubuntu/jammy64"
   provider = "virtualbox"
   template = "./vagrantfile.template"
-  box_name = "ubuntu-2204-php80"
+  box_name = "ubuntu-2204-php82"
+  synced_folder = "${var.schoolboxRepo}"
   ssh_timeout = "10s"
+  skip_add = true
 }
 
 variable "puppetRepo" {
